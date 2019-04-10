@@ -22,6 +22,10 @@ $(function() {
     };
   }
 
+  Player.prototype.hold = function() {
+    this.totalScore += this.turnScore;
+  }
+
 var player1 = new Player("Dino");
 
 
@@ -31,6 +35,13 @@ var player1 = new Player("Dino");
     player1.rollDice();
     $("#diceScore").text(player1.diceRoll);
     $("#turnScore").text(player1.turnScore);
+  })
+
+// hold on click
+  $("#hold").on( "click", function(){
+
+    player1.hold();
+    $("#totalScore").text(player1.totalScore);
   })
 
   $()
