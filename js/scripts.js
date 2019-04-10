@@ -27,6 +27,13 @@ Game.prototype.changeStatus = function() {
       };
     };
   }
+  if(this.players[0].status === true){
+    $('#playerOneArea').removeClass("hidden");
+    $('#playerTwoArea').addClass("hidden");
+  } else {
+    $('#playerTwoArea').removeClass("hidden");
+    $('#playerOneArea').addClass("hidden");
+  }
 }
 
 
@@ -49,6 +56,7 @@ Game.prototype.changeStatus = function() {
   // }
 
   Player.prototype.rollDice = function() {
+
     var roll =  Math.floor((Math.random() * 6) +1);
     if (roll === 1) {
       this.diceRoll = 1;
@@ -67,6 +75,7 @@ Game.prototype.changeStatus = function() {
     this.status = false;
     // alert("turn is over");
     this.scoreCheck();
+
   }
 
   Player.prototype.scoreCheck = function() {
@@ -92,6 +101,7 @@ $(function() {
   game.addNewPlayer(player2);
   // game.addNewPlayer(player3);
   player1.status = true;
+  game.changeStatus();
   // console.log(player1.status);
   // console.log(player2.status);
   // console.log(player3.status);
