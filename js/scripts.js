@@ -1,4 +1,4 @@
-$(function() {
+
 
 
 
@@ -24,26 +24,27 @@ $(function() {
 
   Player.prototype.hold = function() {
     this.totalScore += this.turnScore;
+    this.turnScore = 0;
   }
 
 var player1 = new Player("Dino");
 
 
 // on rollDiceClick
-  $("#rollDice").on( "click", function(){
 
+$(function() {
+  $(".rollDice").on("click", function(event){
+    // event.StopImmediatePropagation();
+    // event.StopPropagation();
     player1.rollDice();
-    $("#diceScore").text(player1.diceRoll);
-    $("#turnScore").text(player1.turnScore);
+    $(".diceScore").text(player1.diceRoll);
+    $(".turnScore").text(player1.turnScore);
   })
-
 // hold on click
-  $("#hold").on( "click", function(){
-
+  $(".hold").on( "click", function(event){
+    // event.StopImmediatePropagation();
+    // event.StopPropagation();
     player1.hold();
-    $("#totalScore").text(player1.totalScore);
+    $(".totalScore").text(player1.totalScore);
   })
-
-  $()
-
 });
