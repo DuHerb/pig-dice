@@ -11,28 +11,28 @@ Game.prototype.addNewPlayer = function(player) {
 
 Game.prototype.changeStatus = function() {
   var length = this.players.length;
-  console.log(this.players);
-  console.log(this.players[0].status);
-  console.log(length);
-    if(this.players[length - 1 ].status === true) {
-      this.players[length - 1].status = false;
-      this.players[0].status = true;
-    } else {
+  // console.log(this.players);
+  // console.log(this.players[0].status);
+  // console.log(length);
+    // if(this.players[length - 1 ].status === true) {
+    //   this.players[length - 1].status = false;
+    //   this.players[0].status = true;
+    // } else {
 
-      for(var i=0; i < length; i++){
-        if (this.players[i].status === true){
-          this.players[i].status = false;
-          this.players[i + 1].status = true;
-          break;
-      };
-    };
-  }
+  //     for(var i=0; i < length; i++){
+  //       if (this.players[i].status === true){
+  //         this.players[i].status = false;
+  //         this.players[i + 1].status = true;
+  //         break;
+  //     };
+  //   };
+  // }
   if(this.players[0].status === true){
-    $('#playerOneArea').removeClass("hidden");
-    $('#playerTwoArea').addClass("hidden");
+    $('#playerOne').removeClass("hidden");
+    $('#playerTwo').addClass("hidden");
   } else {
-    $('#playerTwoArea').removeClass("hidden");
-    $('#playerOneArea').addClass("hidden");
+    $('#playerTwo').removeClass("hidden");
+    $('#playerOne').addClass("hidden");
   }
 }
 
@@ -72,14 +72,15 @@ Game.prototype.changeStatus = function() {
   Player.prototype.endTurn = function(){
     this.totalScore += this.turnScore;
     this.turnScore = 0;
-    this.status = false;
     // alert("turn is over");
+    this.status = false;
     this.scoreCheck();
+    // game.changeStatus();
 
   }
 
   Player.prototype.scoreCheck = function() {
-    if (this.totalScore >= 20) {
+    if (this.totalScore >= 100) {
       alert("Winner Winner Bacon Dinner");
       this.status = false;
       //playAgain = true
@@ -101,7 +102,8 @@ $(function() {
   game.addNewPlayer(player2);
   // game.addNewPlayer(player3);
   player1.status = true;
-  game.changeStatus();
+  console.log(player1.status);
+  // game.changeStatus();
   // console.log(player1.status);
   // console.log(player2.status);
   // console.log(player3.status);
@@ -109,18 +111,33 @@ $(function() {
   // console.log(player1.status);
   // console.log(player2.status);
   // console.log(player3.status);
-  $(".rollDice").on("click", function(event){
+  $("#rollDice1").on("click", function(event){
     // event.StopImmediatePropagation();
     // event.StopPropagation();
     player1.rollDice();
-    $(".diceScore").text(player1.diceRoll);
-    $(".turnScore").text(player1.turnScore);
+    $(".diceScore1").text(player1.diceRoll);
+    $(".turnScore1").text(player1.turnScore);
+  })
+  $("#rollDice2").on("click", function(event){
+    player2.rollDice();
+    $(".diceScore2").text(player2.diceRoll);
+    $(".turnScore2").text(player2.turnScore);
   })
 // hold on click
-  $(".hold").on( "click", function(event){
+  $("#hold1").on("click", function(event){
     // event.StopImmediatePropagation();
     // event.StopPropagation();
     player1.endTurn();
-    $(".totalScore").text(player1.totalScore);
+    $(".totalScore1").text(player1.totalScore);
+    game.changeStatus();
+    console.log(player1.status);
+    console.log(player2.status);
+  });
+  $("#hold2").on("click", function(event){
+    player2.endTurn();
+    $(".totalScore2").text(player2.totalScore);
+    game.changeStatus();
+    console.log(player1.status);
+    console.log(player2.status);
   })
 });
