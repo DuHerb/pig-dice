@@ -17,8 +17,16 @@ Game.prototype.assignId = function(){
 }
 
 Game.prototype.rollDice = function(){
+  var id = this.getActiveIndex();
   var roll =  Math.floor((Math.random() * 6) +1);
-  return roll;
+  $("#rollResult").text(roll);
+  // return roll;
+}
+
+Game.prototype.hold = function(){
+  var id = this.getActiveIndex();
+  this.players[id].playerScore += this.turnScore;
+  this.players[id].showScore();
 }
 
 Game.prototype.getActiveIndex = function(){
@@ -48,6 +56,7 @@ Game.prototype.nextPlayer = function () {
       player.isActive = false;
     })
     this.players[activeIndex + 1].isActive = true;
+    addActive(activeIndex);
   };
 };
 
@@ -56,6 +65,7 @@ Game.prototype.resetTurn = function(){
   this.turnScore = 0;
 }
 
+//Build player score areas for each player entered.
 Game.prototype.buildGameArea = function(){
   this.players.forEach(function(player){
     var id = player.playerId;
@@ -74,7 +84,25 @@ function Player(playerName) {
   this.isActive = false
 }
 
+Player.prototype.showScore = function(){
+  var queryId = ".totalScore"+this.playerId;
+  $(queryId).text(this.playerScore);
+}
 
+//add functionality to roll and hold buttons
+function attachEventListeners(game){
+  $("#rollButton").on("click",function(){
+    game.rollDice();
+  })
+}
+
+// display functions ------------------------------------//
+function addActive (id){
+  var queryId = "#"+id;
+  $(queryId).addClass("isActive");
+}
+
+//document.ready starts here ----------------------------//
 $(document).ready(function(){
 
 var game = new Game();
@@ -84,20 +112,12 @@ var player3 = new Player("Stacey");
 game.addNewPlayer(player1);
 game.addNewPlayer(player2);
 game.addNewPlayer(player3);
-console.log(game.players);
 game.players[0].isActive = true;
-console.log(game.getActiveIndex());
-game.nextPlayer();
-console.log(game.getActiveIndex());
-game.nextPlayer();
-console.log(game.getActiveIndex());
+attachEventListeners(game);
 game.buildGameArea();
-
-
-
-
-
-
+console.log(game.players);
+game.nextPlayer();
+game.nextPlayer();
 
 
 
