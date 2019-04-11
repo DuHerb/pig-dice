@@ -1,116 +1,100 @@
-function Game(){
+// Game object logic.  Game handles turn rolls and scores. ----------/
+function Game() {
+  this.players = [],
   this.currentId = -1,
-  this.players = [];
-}
-
-Game.prototype.addNewPlayer = function(player) {
-  this.currentId ++;
-  player.playerId = this.currentId;
-  this.players.push(player);
-}
-
-Game.prototype.changeStatus = function() {
-  var length = this.players.length;
-  console.log(this.players);
-  console.log(this.players[0].status);
-  console.log(length);
-    if(this.players[length - 1 ].status === true) {
-      this.players[length - 1].status = false;
-      this.players[0].status = true;
-    } else {
-
-      for(var i=0; i < length; i++){
-        if (this.players[i].status === true){
-          this.players[i].status = false;
-          this.players[i + 1].status = true;
-          break;
-      };
-    };
-  }
+  this.rollValue = 0,
+  this.turnScore = 0
 }
 
 
-// Busi
-  function Player(playerName) {
-    this.playerId = 0,
-    this.playerName = playerName,
-    this.diceRoll = 0,
-    this.turnScore = 0,
-    this.totalScore = 0,
-    this.status = false
+Game.prototype.addNewPlayer = function(player){
+    player.playerId = this.assignId();
+    this.players.push(player);
+}
+
+Game.prototype.assignId = function(){
+  this.currentId += 1;
+  return this.currentId;
+}
+
+Game.prototype.rollDice = function(){
+  var roll =  Math.floor((Math.random() * 6) +1);
+  return roll;
+}
+
+Game.prototype.getActiveIndex = function(){
+  for(i=0; i<this.players.length; i++){
+    if (this.players[i].isActive){
+      return i;
+      break;
+    }
   }
+}
 
-  // Player.prototype.turn = function(){
-  //   var turnScore = 0;
-  //   var roll =  Math.floor((Math.random() * 6) +1);
-  //   if(roll === 1) {
-  //
-  //   }
-  // }
+// reset active player to player1
+Game.prototype.resetActiveIndex = function(){
+  this.players.forEach(function(player){
+    isActive = false;
+  })
+  this.players[0].isActive = true;
+}
 
-  Player.prototype.rollDice = function() {
-    var roll =  Math.floor((Math.random() * 6) +1);
-    if (roll === 1) {
-      this.diceRoll = 1;
-      this.turnScore = 0;
-      alert("you rolled a one. Turn Over")
-      this.endTurn();
-    } else {
-      this.diceRoll = roll;
-      this.turnScore += roll;
-    };
-  }
+//moves active status to next player.  if last player is active, player1 becomes active again.
+Game.prototype.nextPlayer = function () {
+  var activeIndex = this.getActiveIndex();
+  if (this.players[this.players.length-1].isActive === true ){
+    this.resetActiveIndex();
+  } else {
+    this.players.forEach(function(player){
+      player.isActive = false;
+    })
+    this.players[activeIndex + 1].isActive = true;
+  };
+};
 
-  Player.prototype.endTurn = function(){
-    this.totalScore += this.turnScore;
-    this.turnScore = 0;
-    this.status = false;
-    // alert("turn is over");
-    this.scoreCheck();
-  }
+Game.prototype.resetTurn = function(){
+  this.rollValue = 0;
+  this.turnScore = 0;
+}
 
-  Player.prototype.scoreCheck = function() {
-    if (this.totalScore >= 20) {
-      alert("Winner Winner Bacon Dinner");
-      this.status = false;
-      //playAgain = true
-    };
-  }
+//Player object logic.  Player objects hold total scrores and active status
+function Player(playerName) {
+  this.playerName = playerName,
+  this.playerScore = 0,
+  this.playerId = 0,
+  this.isActive = false
+}
 
 
+$(document).ready(function(){
 
+var game = new Game();
 var player1 = new Player("Dustin");
 var player2 = new Player("Marc");
-// var player3 = new Player("admin");
+var player3 = new Player("Stacey");
+game.addNewPlayer(player1);
+game.addNewPlayer(player2);
+game.addNewPlayer(player3);
+console.log(game.players);
+game.players[0].isActive = true;
+console.log(game.getActiveIndex());
+game.nextPlayer();
+console.log(game.getActiveIndex());
+game.nextPlayer();
+console.log(game.getActiveIndex());
 
 
-// on rollDiceClick
 
-$(function() {
-  var game = new Game();
-  game.addNewPlayer(player1);
-  game.addNewPlayer(player2);
-  // game.addNewPlayer(player3);
-  player1.status = true;
-  // console.log(player1.status);
-  // console.log(player2.status);
-  // console.log(player3.status);
-  // game.changeStatus();
-  // console.log(player1.status);
-  // console.log(player2.status);
-  // console.log(player3.status);
-  $(".rollDice").on("click", function(event){
-    // event.StopImmediatePropagation();
-    // event.StopPropagation();
-    player1.rollDice();
-    $(".diceScore").text(player1.diceRoll);
-    $(".turnScore").text(player1.turnScore);
-  })
-// hold on click
-  $(".hold").on( "click", function(event){
-    // event.StopImmediatePropagation();
-    // event.StopPropagation();
-    player1.endTurn();
-    $(".totalScore").text(player1.totalScore);
-  })
-});
+
+
+
+
+
+
+
+
+
+
+
+//end of document.ready ---------------------------//
+})
