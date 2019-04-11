@@ -6,7 +6,6 @@ function Game() {
   this.turnScore = 0
 }
 
-
 Game.prototype.addNewPlayer = function(player){
     player.playerId = this.assignId();
     this.players.push(player);
@@ -57,6 +56,16 @@ Game.prototype.resetTurn = function(){
   this.turnScore = 0;
 }
 
+Game.prototype.buildGameArea = function(){
+  this.players.forEach(function(player){
+    var id = player.playerId;
+    var html = "<div id ='" + id + "'><h2>" + player.playerName + "</h2>"
+                + "<h3>Total Score: <span class='totalScore" + id + "'></span></h3>"
+                + "</div>";
+    $("#gameArea").append(html);
+  })
+}
+
 //Player object logic.  Player objects hold total scrores and active status
 function Player(playerName) {
   this.playerName = playerName,
@@ -82,6 +91,7 @@ game.nextPlayer();
 console.log(game.getActiveIndex());
 game.nextPlayer();
 console.log(game.getActiveIndex());
+game.buildGameArea();
 
 
 
